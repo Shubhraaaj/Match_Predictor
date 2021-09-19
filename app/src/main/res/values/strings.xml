@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Match Predictor</string>
+    <string-array name="players_name">
+        <item>Kirat Bohli</item>
+        <item>N.S Nodhi</item>
+        <item>R Rumrah</item>
+        <item>Shashi Henra</item>
+    </string-array>
+    <string-array name="scoring_probability">
+        <item>5%30%25%10%15%1%9%5%</item>
+        <item>10%40%20%5%10%1%4%10%</item>
+        <item>20%30%15%5%5%1%4%20%</item>
+        <item>30%25%5%0%5%1%4%30%</item>
+    </string-array>
+</resources>

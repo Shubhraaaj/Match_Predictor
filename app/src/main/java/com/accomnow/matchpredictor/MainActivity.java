@@ -14,22 +14,21 @@ import java.util.Collections;
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
+
     private TextView mScoreBoardText,mRunsText, mBatsmanText, mRunnerText;
     private Button mBowlBtn;
-    private int score, wickets, currentRuns, batmanNo, runnerNo, balls;
+    private int score, wickets, currentRuns, batmanNo, runnerNo, balls, batsmanScore, runnerScore;
     private ArrayList<String> playersList = new ArrayList<>(); //Stores names of players
     private ArrayList<HashMap<Integer, Integer>> scoreProbMapList= new ArrayList<>(); //Scores probability list
-    /*private HashMap<String, Integer> eachPlayerScoreMap = new HashMap<>();*/
+    private ArrayList<HashMap<Integer, Integer>> arrListHash = new ArrayList<>(); //List of hashmap of runs per cum-prob
+    private ArrayList<ArrayList<Integer>> probsList = new ArrayList<>(); //List of Cumulative Probablities Arraylist
+
     private static int TARGET = 40; //Target
-    /*private Random r;*/
-    private ArrayList<HashMap<Integer, Integer>> arrListHash = new ArrayList<>();
-    private int batsmanScore, runnerScore;
-    private ArrayList<ArrayList<Integer>> probsList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         //View Binding
         mScoreBoardText=findViewById(R.id.main_scrbrd_txt);
         mRunsText=findViewById(R.id.main_runs_txt);
@@ -41,19 +40,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void bindPlayersNRuns() {
-
-        batsmanScore=runnerScore=0;
-
         //default values
-        batmanNo=score=currentRuns=balls=wickets=0;
+        batsmanScore=runnerScore=batmanNo=score=currentRuns=balls=wickets=0;
         runnerNo=1;
-        /*threshold=2;*/
-        /*r = new Random();*/
         String[] scoreProbablity = getResources().getStringArray(R.array.scoring_probability);
         playersList.addAll(Arrays.asList(getResources().getStringArray(R.array.players_name)));
-
-        /*for(String s: playersList)
-            eachPlayerScoreMap.put(s, 0);*/
 
         for(int i=0;i<playersList.size();i++){
             HashMap<Integer, Integer> scoringPattern = new HashMap<>();
@@ -67,8 +58,6 @@ public class MainActivity extends AppCompatActivity {
         mBatsmanText.setText(playersList.get(batmanNo) + " (" + batsmanScore + ")*");
         mRunnerText.setText(playersList.get(runnerNo) + " (" + runnerScore + ")");
         generateProbableRuns();
-        /*mBatsmanText.setText(playersList.get(batmanNo) + " (" + eachPlayerScoreMap.get(playersList.get(batmanNo)) + ")*");
-        mRunnerText.setText(playersList.get(runnerNo) + " (" + eachPlayerScoreMap.get(playersList.get(runnerNo)) + ")");*/
     }
 
     private void generateProbableRuns() {
@@ -91,19 +80,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void generateRuns(){
-        /*ArrayList<Integer> xpress = new ArrayList<>(scoreProbMapList.get(batmanNo).values());
-        ArrayList<Integer> probs = new ArrayList<>(scoreProbMapList.get(batmanNo).values());
-
-        Collections.sort(probs, Collections.reverseOrder());
-        HashMap<Integer, Integer> scoreMap = new HashMap<>();
-        scoreMap.put(probs.get(0), xpress.indexOf(probs.get(0)));
-        for(int i=1;i<probs.size();i++) {
-            probs.set(i, probs.get(i - 1) + probs.get(i));
-            if(xpress.indexOf(probs.get(i)-probs.get(i-1))==0 && (scoreMap.containsValue(0)))
-                scoreMap.put(probs.get(i), 10);
-            else
-                scoreMap.put(probs.get(i), xpress.indexOf(probs.get(i)-probs.get(i-1)));
-        }*/
         balls++;
         int random = (int)Math.ceil(Math.random()*101);
         Log.d("PUT", ""+random);
@@ -134,11 +110,9 @@ public class MainActivity extends AppCompatActivity {
         if(currentRuns<=6)
         {
             batsmanScore+=currentRuns;
-            /*eachPlayerScoreMap.put(playersList.get(batmanNo), eachPlayerScoreMap.get(playersList.get(batmanNo))+currentRuns);*/
             score+=currentRuns;
             mRunsText.setText(String.valueOf(currentRuns));
             mBatsmanText.setText(playersList.get(batmanNo) + " (" + batsmanScore + ")*");
-            /*mBatsmanText.setText(playersList.get(batmanNo) + " (" + eachPlayerScoreMap.get(playersList.get(batmanNo)) + ")*");*/
             if(score>=TARGET)
                 result(true);
             if(currentRuns%2!=0&&runnerNo!=-1){
@@ -150,8 +124,6 @@ public class MainActivity extends AppCompatActivity {
                 runnerScore = temp;
                 mBatsmanText.setText(playersList.get(batmanNo) + " (" + batsmanScore + ")*");
                 mRunnerText.setText(playersList.get(runnerNo) + " (" + runnerScore + ")");
-                /*mBatsmanText.setText(playersList.get(batmanNo) + " (" + eachPlayerScoreMap.get(playersList.get(batmanNo)) + ")*");
-                mRunnerText.setText(playersList.get(runnerNo) + " (" + eachPlayerScoreMap.get(playersList.get(runnerNo)) + ")");*/
             }
         }
         else{
@@ -172,7 +144,6 @@ public class MainActivity extends AppCompatActivity {
                     mRunnerText.setVisibility(View.GONE);
                 }
                 mBatsmanText.setText(playersList.get(batmanNo) + " (" + batsmanScore + ")*");
-                /*mBatsmanText.setText(playersList.get(batmanNo) + " (" + eachPlayerScoreMap.get(playersList.get(batmanNo)) + ")*");*/
             }
         }
         mScoreBoardText.setText(score + " - " + wickets + "\n" + balls/6 + "." + balls%6);
@@ -185,11 +156,8 @@ public class MainActivity extends AppCompatActivity {
             runnerScore = temp;
             mBatsmanText.setText(playersList.get(batmanNo) + " (" + batsmanScore + ")*");
             mRunnerText.setText(playersList.get(runnerNo) + " (" + runnerScore + ")");
-            /*mBatsmanText.setText(playersList.get(batmanNo) + " (" + eachPlayerScoreMap.get(playersList.get(batmanNo)) + ")*");
-            mRunnerText.setText(playersList.get(runnerNo) + " (" + eachPlayerScoreMap.get(playersList.get(runnerNo)) + ")");*/
         }
-        if(balls==24&&score<40)
-            result(false);
+        if(balls==24&&score<40) result(false);
     }
 
     private void result(boolean b) {
