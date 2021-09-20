@@ -7,7 +7,7 @@ It's the last 4 overs of the match. Bengaluru needs 40 runs to win and with 3 wi
 Each player has a different probability for scoring runs. Your coding problem is to simulate the match, ball by ball. 
 The match simulation will require you to use a weighted random number generation based on probability to determine the runs scored per ball.
 
-![alt text](http://url/to/img.png)
+![alt text](https://github.com/Shubhraaaj/Match_Predictor/blob/master/first.png)
 
 Rules of the game:
 #Batsmen change strike end of every over. They also change strike when they score a 1,3 or 5
@@ -16,7 +16,7 @@ Rules of the game:
 
 App wireframe for reference:
 
-![alt text](http://url/to/img.png)
+![alt text](https://github.com/Shubhraaaj/Match_Predictor/blob/master/second.png)
 
 1. On pressing the Bowl button a new score is generated and added to the current striker. In the above example, Kirat is the striker and his current score is 5. On pressing the Bowl button, if he hits a single, then striker is changed to NS Nodhi and the score for Kirat Bolhi is updated to 6 and the striker maker (*) is switched to NS Nodhi.
 
