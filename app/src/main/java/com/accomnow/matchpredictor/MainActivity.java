@@ -19,8 +19,8 @@ public class MainActivity extends AppCompatActivity {
     private Button mBowlBtn;
     private int score, wickets, currentRuns, batmanNo, runnerNo, balls, batsmanScore, runnerScore;
     private ArrayList<String> playersList = new ArrayList<>(); //Stores names of players
-    private ArrayList<HashMap<Integer, Integer>> scoreProbMapList= new ArrayList<>(); //Scores probability list
-    private ArrayList<HashMap<Integer, Integer>> arrListHash = new ArrayList<>(); //List of hashmap of runs per cum-prob
+    private ArrayList<HashMap<Integer, Integer>> scoreProbMapList= new ArrayList<>(); //Scores probability list<Runs, Probablity>
+    private ArrayList<HashMap<Integer, Integer>> arrListHash = new ArrayList<>(); //List of hashmap of runs per cum-prob <Runs, CumProb>
     private ArrayList<ArrayList<Integer>> probsList = new ArrayList<>(); //List of Cumulative Probablities Arraylist
 
     private static int TARGET = 40; //Target
@@ -62,13 +62,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void generateProbableRuns() {
         for (int i=0; i<playersList.size();i++){
-            ArrayList<Integer> xpress = new ArrayList<>(scoreProbMapList.get(i).values());
-            ArrayList<Integer> probs = new ArrayList<>(scoreProbMapList.get(i).values());
-            Collections.sort(probs, Collections.reverseOrder());
-            HashMap<Integer, Integer> scoreMap = new HashMap<>();
+            ArrayList<Integer> xpress = new ArrayList<>(scoreProbMapList.get(i).values()); //5,30,25...5
+            ArrayList<Integer> probs = new ArrayList<>(scoreProbMapList.get(i).values()); //5,30,25..5
+            /*Collections.sort(probs, Collections.reverseOrder());*/ //Descending Sort //probs = 30,25,15,...1
+            HashMap<Integer, Integer> scoreMap = new HashMap<>(); //<30,1><55,2>...
             scoreMap.put(probs.get(0), xpress.indexOf(probs.get(0)));
             for (int j = 1; j < probs.size(); j++) {
-                probs.set(j, probs.get(j - 1) + probs.get(j));
+                probs.set(j, probs.get(j - 1) + probs.get(j)); //Cumulative list
                 if (xpress.indexOf(probs.get(j) - probs.get(j - 1)) == 0 && (scoreMap.containsValue(0)))
                     scoreMap.put(probs.get(j), 10);
                 else
@@ -81,12 +81,22 @@ public class MainActivity extends AppCompatActivity {
 
     public void generateRuns(){
         balls++;
-        int random = (int)Math.ceil(Math.random()*101);
-        Log.d("PUT", ""+random);
-        if(random<=probsList.get(batmanNo).get(0)) //First
+        int random = (int)Math.ceil(Math.random()*101); //54
+        int i=0;
+        //boolean first = true;
+        //5,35,60,70,85,86,95,100 = 8
+        //i=0 < (8-1)
+        while(i<=probsList.get(batmanNo).size()-1){
+            if (random <= probsList.get(batmanNo).get(i)) {
+                currentRuns = arrListHash.get(batmanNo).get(probsList.get(batmanNo).get(i));
+                break;
+            }
+            i++;
+        }
+        /*if(random<=probsList.get(batmanNo).get(0)) //54<=30
             currentRuns=arrListHash.get(batmanNo).get(probsList.get(batmanNo).get(0));
 
-        else if(probsList.get(batmanNo).get(0)<random&&random<=probsList.get(batmanNo).get(1)) //Second
+        else if(probsList.get(batmanNo).get(0)<random&&random<=probsList.get(batmanNo).get(1)) //30<54<=55//End
             currentRuns=arrListHash.get(batmanNo).get(probsList.get(batmanNo).get(1));
 
         else if(probsList.get(batmanNo).get(1)<random&&random<=probsList.get(batmanNo).get(2)) //Third
@@ -101,11 +111,11 @@ public class MainActivity extends AppCompatActivity {
         else if(probsList.get(batmanNo).get(4)<random&&random<=probsList.get(batmanNo).get(5)) //Sixth
             currentRuns=arrListHash.get(batmanNo).get(probsList.get(batmanNo).get(5));
 
-        else if(probsList.get(batmanNo).get(5)<random&&random<=probsList.get(batmanNo).get(6)) //Seventh
+        else if(probsList.get(batmanNo).get(5)<random&&random<=probsList.get(batmanNo).get(6)) //94<96<=99
             currentRuns=arrListHash.get(batmanNo).get(probsList.get(batmanNo).get(6));
 
         else //Eight
-            currentRuns=arrListHash.get(batmanNo).get(probsList.get(batmanNo).get(7));
+            currentRuns=arrListHash.get(batmanNo).get(probsList.get(batmanNo).get(7)); //num>99*/
 
         if(currentRuns<=6)
         {

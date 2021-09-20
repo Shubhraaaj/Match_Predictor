@@ -20,7 +20,6 @@ public class ResultActivity extends AppCompatActivity {
         int wickets = (int) getIntent().getIntExtra("wickets", -1);
         int balls = (int) getIntent().getIntExtra("balls", -1);
         boolean success = getIntent().getBooleanExtra("status", false);
-        Log.d("PUT", "Score: " + score + " | Wickets: " + wickets + " | Balls: " + balls);
         mResultTxt = findViewById(R.id.result_status);
         mReplay = findViewById(R.id.replay_btn);
         if(success)
